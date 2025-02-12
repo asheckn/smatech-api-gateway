@@ -52,4 +52,19 @@ logging:
   level:
     org.springframework.cloud.gateway: DEBUG
 
+springdoc:
+  api-docs:
+    enabled: true
+    groups:
+      enabled: true
+  swagger-ui:
+    enabled: true
+    urls:
+      - name: Authentication Service
+        url:  /auth/v3/api-docs
+      - name: Payment Service
+        url:  /payments/v3/api-docs
+      - name: Store Service
+        url:  /store/v3/api-docs
+    path: /swagger
 
