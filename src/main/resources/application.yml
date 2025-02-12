@@ -1,7 +1,55 @@
+server:
+  port: 8765  # API Gateway port
+
 spring:
   application:
-    name: smatech-api-gateway
+    name: SMATECH-API-GATEWAY
 
-server:
-  port: 8765
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true  # Ensures service names match Eureka case
+      routes:
+        - id: authentication-service
+          uri: lb://SMATECH-AUTHENTICATION-SERVICE
+          predicates:
+            - Path=/auth/**
+          filters:
+            - RewritePath=/auth/(?<segment>.*), /$\{segment}
+
+        - id: payment-service
+          uri: lb://SMATECH-PAYMENT-SERVICE
+          predicates:
+            - Path=/payments/**
+          filters:
+            - RewritePath=/payments/(?<segment>.*), /$\{segment}
+
+        - id: store-service
+          uri: lb://SMATECH-STORE-SERVICE
+          predicates:
+            - Path=/store/**
+          filters:
+            - RewritePath=/store/(?<segment>.*), /$\{segment}
+
+#      default-filters:
+#        - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_FIRST
+#        - name: GlobalCorsFilter
+
+#  redis:
+#    host: localhost
+#    port: 6379
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+
 
