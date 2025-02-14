@@ -1,0 +1,22 @@
+
+
+
+
+services:
+  api-gateway:
+    image: smatech-api-gateway:latest
+    environment:
+      DEFAULT_EUREKA_ZONE: "http://eureka-server:8761/eureka/"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    networks:
+      - smatech
+    ports:
+      - "8765:8765"
+    restart: always
+
+networks:
+  smatech:
+    external: true
